@@ -1,39 +1,49 @@
 ﻿using MedicalClinicApp.Data;
 using MedicalClinicApp.Entities;
 using MedicalClinicApp.Repositories;
+using MedicalClinicApp.Repositories.Extensions;
 
 var employeeRepository = new SqlRepository<Employee>(new MedicalClinicAppDbContext());
+var patientRepository = new SqlRepository<Patient>(new MedicalClinicAppDbContext());
+
+employeeRepository.ItemAdded += EmployeeRepositoryOnItemAdded;
+patientRepository.ItemAdded += PatientRepositoryOnItemAdded;
 
 AddEmployee(employeeRepository);
-AddNurse(employeeRepository);
-AddDoctor(employeeRepository);
+AddPatient(patientRepository);
 
-WriteAllToConsole(employeeRepository);
-
-static void AddEmployee(IRepository<Employee> empRepository)
+static void AddEmployee(IRepository<Employee> employeeRepository)
 {
-    empRepository.Add(new Employee { FirstName = "Damian" });
-    empRepository.Save();
-}
-
-static void AddNurse(IRepository<Employee> nurseRepository)
-{
-    nurseRepository.Add(new Nurse { FirstName = "Wacława" });
-    nurseRepository.Add(new Nurse { FirstName = "Filomena" });
-    nurseRepository.Save();
-}
-
-static void AddDoctor(IRepository<Employee> doctorRepository)
-{
-    doctorRepository.Add(new Doctor { FirstName = "Magdalena" });
-    doctorRepository.Save();
-}
-
-static void WriteAllToConsole(IRepository<Employee> repository)
-{
-    var items = repository.GetAll();
-    foreach (var item in items)
+    var employees = new[]
     {
-        Console.WriteLine(item);
-    }
+        new Employee {Name = "Damian"},
+        new Employee {Name = "Krzysztof"},
+        new Employee {Name = "Szymon"},
+        new Nurse {Name = "Grzegorz"},
+        new Nurse {Name = "Magdalena"},
+        new Doctor {Name = "Zuzanna"}
+    };
+    employeeRepository.AddBatch(employees);
+    employeeRepository.WriteAllToConsole();
+}
+
+static void AddPatient(IRepository<Patient> patientRepository)
+{
+    var patients = new[]
+    {
+        new Patient {Name = "Andżela"},
+        new Patient {Name = "Bolo"}
+    };
+    patientRepository.AddBatch(patients);
+    patientRepository.WriteAllToConsole();
+}
+
+static void EmployeeRepositoryOnItemAdded(object? sender, Employee e)
+{
+    Console.WriteLine($"Employee added => {e.Name} from {sender?.GetType().Name}");
+}
+
+static void PatientRepositoryOnItemAdded(object? sender, Patient p)
+{
+    Console.WriteLine($"Patient added => {p.Name} from {sender?.GetType().Name}");
 }
