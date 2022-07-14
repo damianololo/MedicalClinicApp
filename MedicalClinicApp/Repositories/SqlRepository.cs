@@ -1,4 +1,4 @@
-﻿using MedicalClinicApp.Entities;
+﻿/*using MedicalClinicApp.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicalClinicApp.Repositories
@@ -9,7 +9,7 @@ namespace MedicalClinicApp.Repositories
         private readonly DbContext _dbContext;
         private readonly DbSet<T> _dbSet;
 
-        public event EventHandler<T> ItemAdded;
+        public event EventHandler<T>? ItemAdded;
 
         public SqlRepository(DbContext dbContext)
         {
@@ -35,7 +35,7 @@ namespace MedicalClinicApp.Repositories
 
         public void Remove(T item)
         {
-            _dbSet.Add(item);
+            _dbSet.Remove(item);
         }
 
         public void Save()
@@ -44,3 +44,4 @@ namespace MedicalClinicApp.Repositories
         }
     }
 }
+*/

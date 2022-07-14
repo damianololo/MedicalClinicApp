@@ -2,10 +2,13 @@
 
 namespace MedicalClinicApp.Repositories
 {
-    /*public class ListRepository<T> : IRepository<T>
+    public class SaveToFileRepository<T> : IRepository<T>
         where T : class, IEntity, new()
     {
         private readonly List<T> _items = new();
+        const string FileName = "Lista.txt";
+        public event EventHandler<T>? ItemAdded;
+        public event EventHandler<T>? ItemRemoved;
 
         public IEnumerable<T> GetAll()
         {
@@ -21,15 +24,28 @@ namespace MedicalClinicApp.Repositories
         {
             item.Id = _items.Count + 1;
             _items.Add(item);
+            ItemAdded?.Invoke(this, item);
         }
 
         public void Remove (T item)
         {
             _items.Remove(item);
+            ItemRemoved?.Invoke(this, item);
         }
 
         public void Save()
         {
+            foreach (var item in _items)
+            {
+                Console.WriteLine(item);
+            }
+            using (var writer = File.AppendText($"{FileName}"))
+            {
+                foreach (var item in _items)
+                {
+                    writer.WriteLine(item);
+                }
+            }
         }
-    }*/
+    }
 }
