@@ -2,85 +2,125 @@
 using MedicalClinicApp.Entities;
 using MedicalClinicApp.Repositories;
 using MedicalClinicApp.Repositories.Extensions;
-
-
-Console.WriteLine("|-------------------------------MENU-------------------------------|");
-Console.WriteLine("Obsługa pracowników: wybierz (1) \nRejestracja pacjentów: wybierz (2)");
-Console.WriteLine("Zakończenie działania programu pod klawiszem 'q'.");
-var employeeToFileRepository = new SaveToFileRepository<Employee>();
-var patientToFileRepository = new SaveToFileRepository<Patient>();
-employeeToFileRepository.ItemAdded += EmployeeRepositoryOnItemAdded;
-patientToFileRepository.ItemAdded += PatientRepositoryOnItemAdded;
-var input = Console.ReadLine();
-while (true)
+var input = "";
+while (input != "q")
 {
-    if (input == "1")
+    Console.WriteLine("\n|------------------------------MENU------------------------------|");
+    Console.WriteLine("Obsługa pracowników: wybierz (1) \nRejestracja pacjentów: wybierz (2)");
+    Console.WriteLine("Zakończenie działania programu zawsze pod klawiszem 'q'.");
+    var employeeToFileRepository = new SaveToFileRepository<Employee>();
+    var patientToFileRepository = new SaveToFileRepository<Patient>();
+    employeeToFileRepository.ItemAdded += EmployeeRepositoryOnItemAdded;
+    patientToFileRepository.ItemAdded += PatientRepositoryOnItemAdded;
+    input = Console.ReadLine();
+    while (true)
     {
-        Console.WriteLine("Aby dodać pracownika wybierz:\n(1) Pracownik\n(2) Pielęgniarka\n(3) Doktor");
-        Console.WriteLine("Aby usunąć pracownika z listy wybierz (4)\nWyświetlanie aktualnej listy pracowników: wybierz (5)");
-        var input2 = Console.ReadLine();
-        if (input2 == "q")
+        if (input == "1")
+        {
+            Console.WriteLine("\n******************************************************************");
+            Console.WriteLine("Aby dodać pracownika wybierz:\n(1) Pracownik\n(2) Pielęgniarka\n(3) Doktor");
+            Console.WriteLine("Aby usunąć pracownika z listy wybierz (4)\nWyświetlanie aktualnej listy pracowników: wybierz (5)");
+            Console.WriteLine("Zapis listy do pliku: 'save'.\nWyświetlenie listy z serwera 's'.\nWyjście do menu pod 'q'.");
+            var input2 = Console.ReadLine();
+            if (input2 == "q")
+            {
+                break;
+            }
+            else if (input2 == "1")
+            {
+                Console.WriteLine("Wpisz dane osobowe");
+                var input3 = Console.ReadLine();
+                employeeToFileRepository.Add(new Employee { Name = input3 });
+            }
+            else if (input2 == "2")
+            {
+                Console.WriteLine("Wpisz dane osobowe");
+                var input3 = Console.ReadLine();
+                employeeToFileRepository.Add(new Nurse { Name = input3 });
+            }
+            else if (input2 == "3")
+            {
+                Console.WriteLine("Wpisz dane osobowe");
+                var input3 = Console.ReadLine();
+                employeeToFileRepository.Add(new Doctor { Name = input3 });
+            }
+            else if (input2 == "4")
+            {
+                Console.WriteLine("Kogo wyrzucamy?");
+                //employeeToFileRepository.Remove(Console.ReadLine());
+            }
+            else if (input2 == "5")
+            {
+                Console.Clear();
+                Console.WriteLine("Lista pracowników");
+                employeeToFileRepository.Display();
+            }
+            else if (input2 == "save")
+            {
+                Console.WriteLine("Zapisano listę do pliku");
+                employeeToFileRepository.Save();
+            }
+            else if (input2 == "s")
+            {
+                Console.WriteLine("Zawartość pliku");
+                //employeeToFileRepository.DisplayFromFile();
+            }
+            else
+            {
+                Console.WriteLine("błędny wybór");
+            }
+        }
+        else if (input == "2")
+        {
+            Console.WriteLine("\n******************************************************************");
+            Console.WriteLine("Aby zarejestrować pacjenta: wybierz (1)\nAby wyrejestrować pacjenta: wybierz (2).");
+            Console.WriteLine("Aby wyświetlić aktualną listę pacjentów: wybierz (3)");
+            Console.WriteLine("Zapis listy do pliku: 'save'.\nWyświetlenie listy z serwera 's'.\nWyjście do menu pod 'q'.");
+            var input2 = Console.ReadLine();
+            if (input2 == "q")
+            {
+                break;
+            }
+            else if (input2 == "1")
+            {
+                Console.WriteLine("Rejestracja pacjenta");
+                var input3 = Console.ReadLine();
+                patientToFileRepository.Add(new Patient { Name = input3 });
+            }
+            else if (input2 == "2")
+            {
+                Console.WriteLine("anulowanie wizyty");
+                //patientToFileRepository.Remove("Damian");
+            }
+            else if (input2 == "3")
+            {
+                Console.Clear();
+                Console.WriteLine("Lista pacjentów");
+                patientToFileRepository.Display();
+            }
+            else if (input2 == "save")
+            {
+                Console.WriteLine("Zapisano listę do pliku");
+                patientToFileRepository.Save();
+            }
+            else if (input2 == "s")
+            {
+                Console.WriteLine("Zawartość pliku");
+                //employeeToFileRepository.DisplayFromFile();
+            }
+            else
+            {
+                Console.WriteLine("Błędny wybór");
+            }
+        }
+        else if (input == "q")
         {
             break;
-        }
-        else if (input2 == "1")
-        {
-            Console.WriteLine("Wpisz dane osobowe");
-            employeeToFileRepository.Add(new Employee { Name = Console.ReadLine() });
-        }
-        else if (input2 == "2")
-        {
-            Console.WriteLine("Wpisz dane osobowe");
-            employeeToFileRepository.Add(new Nurse { Name = Console.ReadLine() });
-        }
-        else if (input2 == "3")
-        {
-            Console.WriteLine("Wpisz dane osobowe");
-            employeeToFileRepository.Add(new Doctor { Name = Console.ReadLine() });
-        }
-        else if (input2 == "4")
-        {
-            Console.WriteLine("Kogo wyrzucamy?");
-            //employeeToFileRepository.Remove(GetById);
-        }
-        else if (input2 == "5")
-        {
-            Console.Clear();
-            Console.WriteLine("Lista pracowników");
-            employeeToFileRepository.Save();
         }
         else
         {
-            Console.WriteLine("błędny wybór");
+            throw new ArgumentException("Invalid value");
         }
-    }
-    else if (input == "2")
-    {
-        Console.WriteLine("Aby zarejestrować pacjenta: wybierz (1)\nAby wyrejestrować pacjenta: wybierz (2).");
-        Console.WriteLine("Aby wyświetlić aktualną listę pacjentów: wybierz (3)");
-        var input2 = Console.ReadLine();
-        if (input2 == "q")
-        {
-            break;
-        }
-        else if (input2 == "1")
-        {
-            Console.WriteLine("Rejestracja pacjenta");
-            patientToFileRepository.Add(new Patient { Name = Console.ReadLine() });
-        }
-        else if (input2 == "2")
-        {
-            Console.WriteLine("anulowanie wizyty");
-            //patientToFileRepository.Remove("Damian");
-        }    
-    }
-    else if (input == "q")
-    {
-        break;
-    }
-    else
-    {
-        throw new ArgumentException("Invalid value");
     }
 }
 //employeeToFileRepository.ItemAdded += EmployeeRepositoryOnItemAdded;
