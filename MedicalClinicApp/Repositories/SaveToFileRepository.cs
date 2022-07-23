@@ -29,7 +29,7 @@ namespace MedicalClinicApp.Repositories
             ItemAdded?.Invoke(this, item);
         }
 
-        public void Remove (T item)
+        public void Remove(T item)
         {
             _items.Remove(item);
             ItemRemoved?.Invoke(this, item);
@@ -47,13 +47,13 @@ namespace MedicalClinicApp.Repositories
                 {
                     writer.WriteLine(item);
                 }
-            using (var writer2 = File.AppendText($"{AuditFileName}"))
-            {
-                foreach (var item in _items)
+                using (var writer2 = File.AppendText($"{AuditFileName}"))
                 {
-                    writer2.WriteLine($"{actualTime}{EventAdd}{item}");
+                    foreach (var item in _items)
+                    {
+                        writer2.WriteLine($"{actualTime}{EventAdd}{item}");
+                    }
                 }
-            }
             }
         }
         public void Display()
